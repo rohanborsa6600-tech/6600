@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="mr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#071021">
+  <title>ब्रह्मविद्या कल्पद्रूम — Main Projects</title>
+
+  <!-- system font stack (SF Pro on Apple devices) -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <h1 class="title">ब्रह्मविद्या कल्पद्रूम</h1>
+        <p class="subtitle">श्रीकृष्णरावो म्हणे उद्धवदेवा : हा ज्ञानरत्नाचा ठेवा :<br>
+        भलेतया हातीं नेदावा : अधिकारेंवीण ।।<br>
+        हे ज्ञानसुधा गोमटी : जे पान करीति कर्णपुटीं :<br>
+        तयां कहिं नाहिं कामाठी : जन्ममरणाची ।।(श्रीउद्धवगीता)</p>
+      </div>
+
+      <nav class="top-actions">
+        <button id="refreshBtn" class="btn-ghost" aria-label="Refresh projects">⟳</button>
+        <button id="openAll" class="btn-ghost" title="Open first project">Open</button>
+      </nav>
+    </header>
+
+    <!-- decorative moving liquid blob (behind content) -->
+    <div class="bg-layer" aria-hidden="true">
+      <svg class="blob-1" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="lg1" x1="0" x2="1">
+            <stop offset="0%" stop-color="#7ee5ff"></stop>
+            <stop offset="100%" stop-color="#c59bff"></stop>
+          </linearGradient>
+        </defs>
+        <path fill="url(#lg1)" d="M421,48Q499,96,532,173Q565,250,512,313Q459,376,389,417Q319,458,236,429Q153,400,119,329Q85,258,108,186Q131,114,216,80Q301,46,421,48Z"/>
+      </svg>
+
+      <svg class="blob-2" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="lg2" x1="0" x2="1">
+            <stop offset="0%" stop-color="#ffd7a8"></stop>
+            <stop offset="100%" stop-color="#ffa6c9"></stop>
+          </linearGradient>
+        </defs>
+        <path fill="url(#lg2)" d="M200,120Q260,40,360,80Q460,120,520,200Q580,280,520,360Q460,440,360,480Q260,520,160,480Q60,440,40,340Q20,240,80,160Q140,80,200,120Z" />
+      </svg>
+    </div>
+
+    <main class="content">
+      <section id="projectsGrid" class="cards" aria-live="polite">
+        <!-- cards inserted by script -->
+      </section>
+    </main>
+
+    <footer class="footer">
+      <small>Created for <strong>rohanborsa6600-tech</strong> · Click a card to open project</small>
+    </footer>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
