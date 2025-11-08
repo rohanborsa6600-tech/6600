@@ -1,38 +1,65 @@
 [
   {
+    "id": "gita_bhashya",
     "title": "गीता भाष्य",
     "description": "💎ADX💎",
+    "category": "भाष्य",
+    "tags": ["gita", "bhashya", "spiritua"],
     "url": "https://rohanborsa6600-tech.github.io/Gita-new/",
-    "image": "https://images.unsplash.com/photo-1641730259879-ad98e7db7bcb?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1374"
+    "image": "https://images.unsplash.com/photo-1641730259879-ad98e7db7bcb?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D&auto=format&fit=crop&q=80&w=1374"
   },
   {
+    "id": "sthalpothi",
     "title": "स्थलपोथी",
     "description": "💎ADX💎",
+    "category": "स्थळ",
+    "tags": ["sthalpothi", "offline", "spiritual"],
     "url": "https://rohanborsa6600-tech.github.io/Offline-Sthalpothi-/",
-    "image": "https://images.unsplash.com/photo-1659270936482-b00f8a6b0553?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1374"
+    "image": "https://images.unsplash.com/photo-1659270936482-b00f8a6b0553?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D&auto=format&fit=crop&q=80&w=1374"
   },
   {
+    "id": "sumanmala",
     "title": "सुमनमाला",
     "description": "💎ADX💎",
+    "category": "स्तोत्र",
+    "tags": ["sumanmala", "spiritual", "vachana"],
     "url": "https://rohanborsa6600-tech.github.io/Sumanmala1/",
-    "image": "https://plus.unsplash.com/premium_photo-1750532890127-514e364d3738?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740"
+    "image": "https://plus.unsplash.com/premium_photo-1750532890127-514e364d3738?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D&auto=format&fit=crop&q=80&w=1740"
   },
   {
+    "id": "gita_path",
     "title": "गीता पाठ",
     "description": "💎ADX💎",
+    "category": "पाठ",
+    "tags": ["gita", "path", "recitation"],
     "url": "https://rohanborsa6600-tech.github.io/Geeta-/index.html#section-14",
-    "image": "https://images.unsplash.com/photo-1578885564199-db62248858cf?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1376"
+    "image": "https://images.unsplash.com/photo-1578885564199-db62248858cf?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D&auto=format&fit=crop&q=80&w=1376"
   },
   {
+    "id": "sutrapath",
     "title": "सूत्रपाठ",
     "description": "💎ADX💎",
+    "category": "पाठ",
+    "tags": ["sutrapath", "recitation"],
     "url": "https://rohanborsa6600-tech.github.io/Sutrapath-/#auto-section-23",
-    "image": "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740"
+    "image": "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D&auto=format&fit=crop&q=80&w=1740"
   },
   {
+    "id": "ashtak",
     "title": "अष्टक",
     "description": "💎ADX💎",
+    "category": "काव्य",
+    "tags": ["ashtak", "stotra"],
     "url": "https://rohanborsa6600-tech.github.io/ASHTAK/",
-    "image": "https://plus.unsplash.com/premium_photo-1670044020352-a1573637e73f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1615"
+    "image": "https://plus.unsplash.com/premium_photo-1670044020352-a1573637e73f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D&auto=format&fit=crop&q=80&w=1615"
+  },
+  {
+    "id": "utility_calc",
+    "title": "Calculator",
+    "description": "A simple calculator app.",
+    "category": "Utility Apps",
+    "tags": ["calculator", "math", "tool"],
+    "url": "https://rohanborsa6600-tech.github.io/Simple-Calculator/",
+    "image": "https://images.unsplash.com/photo-1594910103720-0c4a92f8f7c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470"
   }
 ]
