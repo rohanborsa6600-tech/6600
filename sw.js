@@ -1,50 +1,85 @@
-const CACHE_NAME = 'brahmavidya-cache-v1';
-// PWA ने ऑफलाइन काय सेव्ह करावे:
-const urlsToCache = [
+// कॅशेचे नवीन व्हर्जन (Item 1 - True Offline)
+const CACHE_NAME = 'brahmavidya-cache-v2';
+const CORE_ASSETS = [
   'index.html',
   'projects.json',
   'https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js'
-  // तुम्ही तुमच्या बॅकग्राउंड इमेजेस पण इथे ऍड करू शकता
+  // इमेजेस आणि iframe कंटेंट आता आपोआप कॅशे होतील (dynamically)
 ];
 
-// Install: कॅशे तयार करणे
+// Install: कोअर ॲसेट्स कॅशे करणे
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+        console.log('Service Worker: Caching core assets');
+        return cache.addAll(CORE_ASSETS);
       })
-  );
-});
-
-// Fetch: कॅशेमधून रिस्पॉन्स देणे
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // कॅशेमध्ये सापडले, तर तेथून द्या
-        if (response) {
-          return response;
-        }
-        // नाहीतर, नेटवर्कवरून आणा
-        return fetch(event.request);
-      })
+      .then(() => self.skipWaiting()) // नवीन व्हर्जन लगेच ऍक्टिव्हेट करणे
   );
 });
 
 // Activate: जुने कॅशे साफ करणे
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Service Worker: Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
-    })
+    }).then(() => self.clients.claim()) // नवीन सर्व्हिस वर्कर लगेच कंट्रोल घेईल
+  );
+});
+
+// Fetch: 'Cache-First, fallback to Network, then Cache' स्ट्रॅटेजी
+self.addEventListener('fetch', event => {
+  // projects.json साठी 'Network-First' वापरू, जेणेकरून अपडेट्स मिळतील
+  if (event.request.url.includes('projects.json')) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(cache => {
+        return fetch(event.request)
+          .then(networkResponse => {
+            // नेटवर्कवरून मिळाली, तर कॅशे अपडेट करा
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          })
+          .catch(() => {
+            // नेटवर्क फेल झाले, तर कॅशेमधून द्या
+            return cache.match(event.request);
+          });
+      })
+    );
+    return; // इथेच थांबा
+  }
+
+  // इतर सर्व रिक्वेस्टसाठी (Images, iFrames, etc.) 'Cache-First'
+  event.respondWith(
+    caches.match(event.request)
+      .then(cachedResponse => {
+        // 1. कॅशेमध्ये असेल, तर लगेच द्या
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        // 2. कॅशेमध्ये नसेल, तर नेटवर्कवरून आणा
+        return fetch(event.request)
+          .then(networkResponse => {
+            // 3. आणि पुढच्या वेळेसाठी कॅशेमध्ये सेव्ह करा
+            return caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, networkResponse.clone());
+                return networkResponse;
+              });
+          });
+      })
+      .catch(error => {
+        // ऑफलाइन असताना एरर येऊ शकतो
+        console.log('Service Worker: Fetch failed:', error);
+        // तुम्ही इथे एक 'ऑफलाइन' पेज पण दाखवू शकता
+      })
   );
 });
