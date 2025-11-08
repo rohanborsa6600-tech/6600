@@ -110,109 +110,143 @@
             margin-bottom: 1.5rem; display: inline-block;
         }
 
-        /* --- 8. कॅटेगरी लिस्ट (थंबनेलसह) --- */
-        .category-list { list-style: none; }
-        .category-list li {
-            padding: 1.25rem;
-            cursor: pointer;
-            margin-bottom: 1.5rem;
-            position: relative;
-            background-size: cover; background-position: center;
-            min-height: 150px;
-            display: flex; flex-direction: column;
-            justify-content: center; overflow: hidden;
-            
-            /* नवीन: 3D टिल्ट (Item 4) आणि ॲनिमेशन (Item 2) */
-            transition: transform 0.3s ease, background 0.2s ease, box-shadow 0.3s ease;
-            transform-style: preserve-3d;
-        }
-        /* 3D टिल्ट इफेक्ट (Item 4) */
-        .category-list li:hover {
-            transform: scale(1.03) perspective(1000px) rotateX(2deg) rotateY(3deg);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        .category-list li::before { /* थंबनेलवर गडद लेयर */
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 16px;
-            transition: background 0.3s ease;
-        }
-        .category-list li:hover::before { background: rgba(0, 0, 0, 0.3); }
-        
-        /* टेक्स्टला लेयरच्या वर आणण्यासाठी */
-        .card-content { position: relative; z-index: 2; }
-        .card-content h2, .card-content p {
-            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-        }
-        .card-content h2 { font-size: 1.5rem; margin-bottom: 0.25rem; }
-        .card-content p { font-size: 0.9rem; opacity: 0.9; }
+/* --- 8. कॅटेगरी लिस्ट (थंबनेलसह) --- */
+.category-list li {
+    padding: 1.25rem;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    position: relative;
+    
+    /* इथे बदल करा */
+    /* नवीन: कार्डला उभे रेक्टेंगल बनवण्यासाठी */
+    width: 250px; /* निश्चित रुंदी */
+    min-height: 350px; /* निश्चित किमान उंची */
+    max-height: 400px; /* कमाल उंची पण सेट करू शकतो, आवश्यकतेनुसार */
 
-        /* नवीन: कार्डवरील बटणे (Item 13, 15) */
-        .card-actions {
-            position: absolute;
-            z-index: 2;
-            top: 0.75rem;
-            right: 0.75rem;
-            display: flex;
-            gap: 0.5rem;
-        }
-        .card-action-btn {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s ease, transform 0.2s ease;
-            backdrop-filter: blur(5px);
-        }
-        .card-action-btn:hover { background: rgba(0, 0, 0, 0.5); transform: scale(1.1); }
-        /* "वाचले" बटण (Item 13) */
-        .read-toggle.read {
-            background: var(--highlight-color);
-            color: #111;
-        }
+    background-size: cover; /* इमेज पूर्ण कार्ड भरेल */
+    background-position: center; /* इमेज सेंटरमध्ये दिसेल */
+    
+    display: flex; flex-direction: column;
+    justify-content: flex-end; /* टेक्स्ट खाली दिसेल */
+    overflow: hidden;
+    
+    /* नवीन: 3D टिल्ट (Item 4) आणि ॲनिमेशन (Item 2) */
+    transition: transform 0.3s ease, background 0.2s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+}
 
-        /* --- व्ह्यू टॉगल CSS (Item 2 - ॲनिमेशनसाठी) --- */
-        .category-list {
-            transition: grid-template-columns 0.4s ease; /* ॲनिमेशन */
-        }
-        
-        /* व्ह्यू 1: ग्रिड (Grid) */
-        .category-list.view-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-        .category-list.view-grid li { margin-bottom: 0; }
+/* 3D टिल्ट इफेक्ट (Item 4) */
+.category-list li:hover {
+    transform: scale(1.03) perspective(1000px) rotateX(2deg) rotateY(3deg);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
 
-        /* व्ह्यू 2: लिस्ट (List) */
-        .category-list.view-list {
-            display: flex; flex-direction: column; gap: 1rem;
-        }
-        .category-list.view-list li { width: 100%; margin-bottom: 0; }
+.category-list li::before { /* थंबनेलवर गडद लेयर */
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 16px;
+    transition: background 0.3s ease;
+}
+.category-list li:hover::before { background: rgba(0, 0, 0, 0.3); }
 
-        /* व्ह्यू 3: रो (Row / Horizontal) - Item 14 साठी वापरू */
-        .category-list.view-horizontal {
-            display: flex; overflow-x: auto; white-space: nowrap;
-            gap: 1.5rem; padding: 0.5rem 0.25rem 1.5rem 0.25rem;
-            -ms-overflow-style: none; scrollbar-width: none;
-        }
-        .category-list.view-horizontal::-webkit-scrollbar { display: none; }
-        .category-list.view-horizontal li {
-            width: 280px; flex-shrink: 0;
-            display: inline-block; margin-bottom: 0;
-        }
-        /* "अलीकडे पाहिलेले" साठी थोडे लहान कार्ड्स */
-        #recently-viewed-list li {
-            min-height: 120px;
-            width: 250px;
-        }
-         #recently-viewed-list h2 { font-size: 1.2rem; }
+/* टेक्स्टला लेयरच्या वर आणण्यासाठी */
+.card-content { 
+    position: relative; 
+    z-index: 2; 
+    padding: 1rem; /* टेक्स्ट आणि तळाच्या कडेमध्ये अंतर */
+    text-align: center; /* टेक्स्ट मध्यभागी दिसेल */
+}
+.card-content h2, .card-content p {
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+.card-content h2 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+.card-content p { font-size: 0.9rem; opacity: 0.9; }
+
+/* नवीन: कार्डवरील बटणे (Item 13, 15) */
+.card-actions {
+    position: absolute;
+    z-index: 2;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+}
+.card-action-btn {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+    backdrop-filter: blur(5px);
+}
+.card-action-btn:hover { background: rgba(0, 0, 0, 0.5); transform: scale(1.1); }
+/* "वाचले" बटण (Item 13) */
+.read-toggle.read {
+    background: var(--highlight-color);
+    color: #111;
+}
+
+/* --- व्ह्यू टॉगल CSS (Item 2 - ॲनिमेशनसाठी) --- */
+.category-list {
+    transition: grid-template-columns 0.4s ease; /* ॲनिमेशन */
+}
+
+/* व्ह्यू 1: ग्रिड (Grid) */
+.category-list.view-grid {
+    display: grid;
+    /* auto-fit मुळे आता रुंदीच्या हिशोबाने कार्ड्स येतील */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 1.5rem;
+    justify-content: center; /* नवीन: ग्रिड मध्यभागी आणण्यासाठी */
+}
+.category-list.view-grid li { 
+    margin-bottom: 0;
+    width: auto; /* ग्रिड आपोआप रुंदी ऍडजस्ट करेल */
+}
+
+/* व्ह्यू 2: लिस्ट (List) */
+.category-list.view-list {
+    display: flex; flex-direction: column; gap: 1rem;
+    align-items: center; /* नवीन: लिस्ट मध्यभागी आणण्यासाठी */
+}
+.category-list.view-list li { 
+    width: 80%; /* लिस्ट व्ह्यूमध्ये कार्डची रुंदी कमी करू शकतो */
+    max-width: 350px; /* लिस्ट व्ह्यूसाठी कमाल रुंदी */
+    margin-bottom: 0;
+    min-height: 200px; /* लिस्ट व्ह्यूमध्ये थोडे लहान दिसतील */
+}
+.category-list.view-list .card-content h2 { font-size: 1.3rem; }
+.category-list.view-list .card-content p { font-size: 0.8rem; }
+
+
+/* व्ह्यू 3: रो (Row / Horizontal) - Item 14 साठी वापरू */
+.category-list.view-horizontal {
+    display: flex; overflow-x: auto; white-space: nowrap;
+    gap: 1.5rem; padding: 0.5rem 0.25rem 1.5rem 0.25rem;
+    -ms-overflow-style: none; scrollbar-width: none;
+    justify-content: flex-start; /* नवीन: हे आता डावीकडून सुरू होतील */
+}
+.category-list.view-horizontal::-webkit-scrollbar { display: none; }
+.category-list.view-horizontal li {
+    width: 250px; /* निश्चित रुंदी, उभे रेक्टेंगलसाठी */
+    flex-shrink: 0;
+    display: inline-block; margin-bottom: 0;
+    min-height: 350px; /* रो व्ह्यूमध्ये पण सारखे दिसतील */
+}
+
+/* "अलीकडे पाहिलेले" साठी थोडे लहान कार्ड्स */
+#recently-viewed-list li {
+    min-height: 250px; /* अलीकडील व्ह्यूसाठी कमी उंची */
+    width: 200px; /* अलीकडील व्ह्यूसाठी कमी रुंदी */
+}
+ #recently-viewed-list .card-content h2 { font-size: 1.1rem; }
+ #recently-viewed-list .card-content p { font-size: 0.75rem; }
+
 
         /* --- 9. फुल-स्क्रीन Modal --- */
         .modal-overlay {
