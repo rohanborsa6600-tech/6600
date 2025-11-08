@@ -13,15 +13,17 @@
     <style>
         /* --- 1. व्हेरिएबल्स आणि थीम --- */
         :root {
-            --bg-image-light: url('https://plus.unsplash.com/premium_photo-1671684686834-d72a16307e38?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1227');
-            --bg-image-dark: url('https://images.unsplash.com/photo-1657632843433-e6a8b7451ac6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1424');
+            --bg-image-light: url('https://plus.unsplash.com/premium_photo-1672312039675-9601ed434066?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%D&auto=format&fit=crop&q=80&w=1374');
+            --bg-image-dark: url('https://plus.unsplash.com/premium_photo-1674203955483-b6dc5445b8f7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%D%D&auto=format&fit=crop&q=80&w=1470');
             --glass-bg-light: rgba(255, 255, 255, 0.15);
             --glass-border-light: rgba(255, 255, 255, 0.2);
             --text-color: #ffffff;
             --glass-bg-dark: rgba(0, 0, 0, 0.15);
             --glass-border-dark: rgba(255, 255, 255, 0.1);
             --blur-amount: 15px;
-            --highlight-color: #00bcd4; /* नवीन */
+            --highlight-color: #00bcd4;
+            --progress-bar-bg: rgba(255, 255, 255, 0.2);
+            --progress-bar-fill: var(--highlight-color);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -33,8 +35,6 @@
             background-attachment: fixed; transition: background-image 0.7s ease-in-out;
         }
         body[data-theme="dark"] { background-image: var(--bg-image-dark); }
-
-        /* --- 2. मुख्य कंटेनर --- */
         .container { max-width: 800px; margin: 0 auto; text-align: center; }
         header h1 { font-size: 2.2rem; margin-bottom: 1rem; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); }
         .subtitle {
@@ -43,7 +43,7 @@
             font-style: italic; opacity: 0.9;
         }
 
-        /* --- 3. iOS सारखा Glass UI --- */
+        /* --- 3. Glass UI --- */
         .glass-ui {
             background: var(--glass-bg-light);
             backdrop-filter: blur(var(--blur-amount));
@@ -62,286 +62,194 @@
         .theme-switch-wrapper { display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
         .theme-switch { display: inline-block; height: 34px; position: relative; width: 60px; }
         .theme-switch input { display: none; }
-        .slider {
-            background-color: #555; bottom: 0; cursor: pointer; left: 0;
-            position: absolute; right: 0; top: 0; transition: .4s; border-radius: 34px;
-        }
-        .slider:before {
-            content: '🌙'; font-size: 18px; line-height: 26px; text-align: center;
-            background-color: #fff; bottom: 4px; height: 26px; left: 4px;
-            position: absolute; transition: .4s; width: 26px; border-radius: 50%;
-        }
+        .slider { background-color: #555; bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; border-radius: 34px; }
+        .slider:before { content: '🌙'; font-size: 18px; line-height: 26px; text-align: center; background-color: #fff; bottom: 4px; height: 26px; left: 4px; position: absolute; transition: .4s; width: 26px; border-radius: 50%; }
         input:checked + .slider { background-color: #ccc; }
         input:checked + .slider:before { content: '☀️'; transform: translateX(26px); }
 
-        /* --- 5. व्ह्यू टॉगल बटणे --- */
-        .view-toggle {
-            display: flex; justify-content: center; padding: 0.5rem;
-            margin: 0 auto 1.5rem auto; width: fit-content;
-        }
-        .view-toggle button {
-            background: transparent; border: none; color: var(--text-color);
-            font-size: 1.5rem; padding: 0.25rem 1rem; cursor: pointer;
-            opacity: 0.5; transition: opacity 0.2s ease, transform 0.2s ease;
-        }
+        /* --- 5. व्ह्यू टॉगल --- */
+        .view-toggle { display: flex; justify-content: center; padding: 0.5rem; margin: 0 auto 1.5rem auto; width: fit-content; }
+        .view-toggle button { background: transparent; border: none; color: var(--text-color); font-size: 1.5rem; padding: 0.25rem 1rem; cursor: pointer; opacity: 0.5; transition: opacity 0.2s ease, transform 0.2s ease; }
         .view-toggle button.active { opacity: 1; transform: scale(1.1); }
         .view-toggle button:hover { opacity: 0.8; }
 
-        /* --- 6. सर्च बार (आणि कमांड पॅलेट) --- */
+        /* --- 6. सर्च बार --- */
         .search-wrapper { position: relative; }
-        #search-bar {
-            width: 100%; padding: 1rem; font-size: 1rem;
-            border: none; outline: none; color: var(--text-color);
-            margin-bottom: 1.5rem;
-        }
+        #search-bar { width: 100%; padding: 1rem; font-size: 1rem; border: none; outline: none; color: var(--text-color); margin-bottom: 1.5rem; }
         #search-bar::placeholder { color: rgba(255, 255, 255, 0.7); }
-        /* नवीन: Cmd+K टिप (Item 8) */
-        .cmd-tip {
-            position: absolute; right: 1rem; top: 0.9rem;
-            font-size: 0.8rem; background: rgba(0,0,0,0.2);
-            padding: 0.2rem 0.5rem; border-radius: 6px;
-            pointer-events: none; opacity: 0.7;
-        }
-
-        /* --- 7. कॅटेगरी आणि सेक्शन्स --- */
-        .category-section { margin-bottom: 2.5rem; text-align: left; }
-        .category-title {
-            font-size: 1.5rem; padding: 0.75rem 1.25rem;
-            margin-bottom: 1.5rem; display: inline-block;
-        }
-
-/* --- 8. कॅटेगरी लिस्ट (थंबनेलसह) --- */
-.category-list li {
-    padding: 1.25rem;
-    cursor: pointer;
-    margin-bottom: 1.5rem;
-    position: relative;
-    
-    /* इथे बदल करा */
-    /* नवीन: कार्डला उभे रेक्टेंगल बनवण्यासाठी */
-    width: 250px; /* निश्चित रुंदी */
-    min-height: 350px; /* निश्चित किमान उंची */
-    max-height: 400px; /* कमाल उंची पण सेट करू शकतो, आवश्यकतेनुसार */
-
-    background-size: cover; /* इमेज पूर्ण कार्ड भरेल */
-    background-position: center; /* इमेज सेंटरमध्ये दिसेल */
-    
-    display: flex; flex-direction: column;
-    justify-content: flex-end; /* टेक्स्ट खाली दिसेल */
-    overflow: hidden;
-    
-    /* नवीन: 3D टिल्ट (Item 4) आणि ॲनिमेशन (Item 2) */
-    transition: transform 0.3s ease, background 0.2s ease, box-shadow 0.3s ease;
-    transform-style: preserve-3d;
-}
-
-/* 3D टिल्ट इफेक्ट (Item 4) */
-.category-list li:hover {
-    transform: scale(1.03) perspective(1000px) rotateX(2deg) rotateY(3deg);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-}
-
-.category-list li::before { /* थंबनेलवर गडद लेयर */
-    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 16px;
-    transition: background 0.3s ease;
-}
-.category-list li:hover::before { background: rgba(0, 0, 0, 0.3); }
-
-/* टेक्स्टला लेयरच्या वर आणण्यासाठी */
-.card-content { 
-    position: relative; 
-    z-index: 2; 
-    padding: 1rem; /* टेक्स्ट आणि तळाच्या कडेमध्ये अंतर */
-    text-align: center; /* टेक्स्ट मध्यभागी दिसेल */
-}
-.card-content h2, .card-content p {
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-}
-.card-content h2 { font-size: 1.5rem; margin-bottom: 0.25rem; }
-.card-content p { font-size: 0.9rem; opacity: 0.9; }
-
-/* नवीन: कार्डवरील बटणे (Item 13, 15) */
-.card-actions {
-    position: absolute;
-    z-index: 2;
-    top: 0.75rem;
-    right: 0.75rem;
-    display: flex;
-    gap: 0.5rem;
-}
-.card-action-btn {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s ease, transform 0.2s ease;
-    backdrop-filter: blur(5px);
-}
-.card-action-btn:hover { background: rgba(0, 0, 0, 0.5); transform: scale(1.1); }
-/* "वाचले" बटण (Item 13) */
-.read-toggle.read {
-    background: var(--highlight-color);
-    color: #111;
-}
-
-/* --- व्ह्यू टॉगल CSS (Item 2 - ॲनिमेशनसाठी) --- */
-.category-list {
-    transition: grid-template-columns 0.4s ease; /* ॲनिमेशन */
-}
-
-/* व्ह्यू 1: ग्रिड (Grid) */
-.category-list.view-grid {
-    display: grid;
-    /* auto-fit मुळे आता रुंदीच्या हिशोबाने कार्ड्स येतील */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-    gap: 1.5rem;
-    justify-content: center; /* नवीन: ग्रिड मध्यभागी आणण्यासाठी */
-}
-.category-list.view-grid li { 
-    margin-bottom: 0;
-    width: auto; /* ग्रिड आपोआप रुंदी ऍडजस्ट करेल */
-}
-
-/* व्ह्यू 2: लिस्ट (List) */
-.category-list.view-list {
-    display: flex; flex-direction: column; gap: 1rem;
-    align-items: center; /* नवीन: लिस्ट मध्यभागी आणण्यासाठी */
-}
-.category-list.view-list li { 
-    width: 80%; /* लिस्ट व्ह्यूमध्ये कार्डची रुंदी कमी करू शकतो */
-    max-width: 350px; /* लिस्ट व्ह्यूसाठी कमाल रुंदी */
-    margin-bottom: 0;
-    min-height: 200px; /* लिस्ट व्ह्यूमध्ये थोडे लहान दिसतील */
-}
-.category-list.view-list .card-content h2 { font-size: 1.3rem; }
-.category-list.view-list .card-content p { font-size: 0.8rem; }
-
-
-/* व्ह्यू 3: रो (Row / Horizontal) - Item 14 साठी वापरू */
-.category-list.view-horizontal {
-    display: flex; overflow-x: auto; white-space: nowrap;
-    gap: 1.5rem; padding: 0.5rem 0.25rem 1.5rem 0.25rem;
-    -ms-overflow-style: none; scrollbar-width: none;
-    justify-content: flex-start; /* नवीन: हे आता डावीकडून सुरू होतील */
-}
-.category-list.view-horizontal::-webkit-scrollbar { display: none; }
-.category-list.view-horizontal li {
-    width: 250px; /* निश्चित रुंदी, उभे रेक्टेंगलसाठी */
-    flex-shrink: 0;
-    display: inline-block; margin-bottom: 0;
-    min-height: 350px; /* रो व्ह्यूमध्ये पण सारखे दिसतील */
-}
-
-/* "अलीकडे पाहिलेले" साठी थोडे लहान कार्ड्स */
-#recently-viewed-list li {
-    min-height: 250px; /* अलीकडील व्ह्यूसाठी कमी उंची */
-    width: 200px; /* अलीकडील व्ह्यूसाठी कमी रुंदी */
-}
- #recently-viewed-list .card-content h2 { font-size: 1.1rem; }
- #recently-viewed-list .card-content p { font-size: 0.75rem; }
-
-
-        /* --- 9. फुल-स्क्रीन Modal --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(var(--blur-amount));
-            -webkit-backdrop-filter: blur(var(--blur-amount));
-            display: none; align-items: center; justify-content: center; z-index: 1000;
-            opacity: 0; transition: opacity 0.3s ease;
-        }
-        .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-overlay iframe {
-            width: 95vw; height: 95vh;
-            border: 1px solid var(--glass-border-light);
-            border-radius: 10px; background: #fff;
-            transform: scale(0.95);
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-        .modal-overlay.active iframe {
-            transform: scale(1);
-            opacity: 1;
-        }
-        .close-button {
-            position: absolute; top: 20px; right: 30px; font-size: 2.5rem;
-            font-weight: bold; color: white; background: transparent;
-            border: none; cursor: pointer; z-index: 1001;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.7);
-            transition: transform 0.2s ease;
-        }
-        .close-button:hover { transform: scale(1.1); }
-
-        /* --- 10. नवीन: कमांड पॅलेट (Item 8) --- */
-        #command-palette-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(var(--blur-amount));
-            -webkit-backdrop-filter: blur(var(--blur-amount));
-            z-index: 2000;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.2s ease-in-out;
-        }
-        #command-palette-overlay.active {
-            display: block;
-            opacity: 1;
-        }
-        #command-palette {
-            position: absolute;
-            top: 20vh;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 500px;
-            background: var(--glass-bg-dark);
-            border: 1px solid var(--glass-border-dark);
-            border-radius: 12px;
-            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            transition: transform 0.2s ease-out;
-        }
-        #command-palette-overlay.active #command-palette {
-            transform: translateX(-50%) scale(1);
-        }
-        #cmd-input {
+        .cmd-tip { position: absolute; right: 1rem; top: 0.9rem; font-size: 0.8rem; background: rgba(0,0,0,0.2); padding: 0.2rem 0.5rem; border-radius: 6px; pointer-events: none; opacity: 0.7; }
+        
+        /* --- 7. नवीन: प्रोग्रेस बार (Item 4) --- */
+        #progress-container {
             width: 100%;
-            padding: 1rem;
-            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            padding: 0 0.5rem;
+        }
+        #progress-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+        #progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: var(--progress-bar-bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0%; /* JS हे अपडेट करेल */
+            background: var(--progress-bar-fill);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        /* --- 8. नवीन: फिल्टर्स (Item 4) --- */
+        .filter-toggle {
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem;
+            margin: 0 auto 1.5rem auto;
+            width: fit-content;
+        }
+        .filter-toggle button {
             background: transparent;
             border: none;
-            border-bottom: 1px solid var(--glass-border-dark);
             color: var(--text-color);
-            outline: none;
-        }
-        #cmd-results {
-            list-style: none;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        #cmd-results li {
-            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
             cursor: pointer;
-            text-align: left;
-            border-bottom: 1px solid var(--glass-border-dark);
-            transition: background 0.2s ease;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+            border-radius: 12px;
         }
-        #cmd-results li:last-child { border-bottom: none; }
-        #cmd-results li:hover, #cmd-results li.selected {
+        .filter-toggle button.active {
+            opacity: 1;
+            font-weight: bold;
             background: rgba(255, 255, 255, 0.1);
         }
-        #cmd-results li small {
-            opacity: 0.7;
-            margin-left: 0.5rem;
-            font-size: 0.8rem;
+
+        /* --- 9. कॅटेगरी आणि कार्ड्स --- */
+        .category-section { margin-bottom: 2.5rem; text-align: left; }
+        .category-title { font-size: 1.5rem; padding: 0.75rem 1.25rem; margin-bottom: 1.5rem; display: inline-block; }
+        .category-list { list-style: none; }
+        .category-list li {
+            padding: 1.25rem; cursor: pointer; margin-bottom: 1.5rem;
+            position: relative;
+            /* उभ्या कार्डसाठी */
+            width: 250px;
+            min-height: 350px;
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column;
+            justify-content: flex-end; /* टेक्स्ट खाली */
+            overflow: hidden;
+            transition: transform 0.3s ease, background 0.2s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        .category-list li:hover {
+            transform: scale(1.03) perspective(1000px) rotateX(2deg) rotateY(3deg);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        .category-list li::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5); z-index: 1; border-radius: 16px;
+            transition: background 0.3s ease;
+        }
+        .category-list li:hover::before { background: rgba(0, 0, 0, 0.3); }
+        
+        .card-content { position: relative; z-index: 2; padding: 1rem; text-align: center; }
+        .card-content h2, .card-content p { text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+        .card-content h2 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .card-content p { font-size: 0.9rem; opacity: 0.9; }
+
+        .card-actions { position: absolute; z-index: 2; top: 0.75rem; right: 0.75rem; display: flex; gap: 0.5rem; }
+        .card-action-btn { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, transform 0.2s ease; backdrop-filter: blur(5px); }
+        .card-action-btn:hover { background: rgba(0, 0, 0, 0.5); transform: scale(1.1); }
+        .read-toggle.read { background: var(--highlight-color); color: #111; }
+        
+        /* व्ह्यू 1: ग्रिड (Grid) */
+        .category-list.view-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; justify-content: center; }
+        .category-list.view-grid li { margin-bottom: 0; width: auto; }
+        /* व्ह्यू 2: लिस्ट (List) */
+        .category-list.view-list { display: flex; flex-direction: column; gap: 1rem; align-items: center; }
+        .category-list.view-list li { width: 80%; max-width: 350px; margin-bottom: 0; min-height: 200px; }
+        /* व्ह्यू 3: रो (Row / Horizontal) */
+        .category-list.view-horizontal { display: flex; overflow-x: auto; white-space: nowrap; gap: 1.5rem; padding: 0.5rem 0.25rem 1.5rem 0.25rem; -ms-overflow-style: none; scrollbar-width: none; }
+        .category-list.view-horizontal::-webkit-scrollbar { display: none; }
+        .category-list.view-horizontal li { width: 250px; flex-shrink: 0; display: inline-block; margin-bottom: 0; min-height: 350px; }
+        #recently-viewed-list li { min-height: 250px; width: 200px; }
+        #recently-viewed-list .card-content h2 { font-size: 1.1rem; }
+        
+        /* --- 10. नवीन: लोडिंग स्केलेटन (Item 3) --- */
+        .skeleton {
+            background: var(--glass-bg-dark);
+            border: 1px solid var(--glass-border-dark);
+            position: relative;
+            overflow: hidden;
+        }
+        .skeleton::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            animation: shimmer 1.5s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* --- 11. नवीन: "No Results" मेसेज (Item 3) --- */
+        #no-results {
+            display: none; /* JS हे दाखवेल */
+            padding: 3rem 1rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            text-align: center;
+        }
+
+        /* --- 12. Modal --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(var(--blur-amount)); -webkit-backdrop-filter: blur(var(--blur-amount)); display: none; align-items: center; justify-content: center; z-index: 1000; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-overlay iframe { width: 95vw; height: 95vh; border: 1px solid var(--glass-border-light); border-radius: 10px; background: #fff; transform: scale(0.95); opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease; }
+        .modal-overlay.active iframe { transform: scale(1); opacity: 1; }
+        .close-button { position: absolute; top: 20px; right: 30px; font-size: 2.5rem; font-weight: bold; color: white; background: transparent; border: none; cursor: pointer; z-index: 1001; text-shadow: 0 1px 3px rgba(0,0,0,0.7); transition: transform 0.2s ease; }
+        .close-button:hover { transform: scale(1.1); }
+
+        /* --- 13. कमांड पॅलेट --- */
+        #command-palette-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(var(--blur-amount)); -webkit-backdrop-filter: blur(var(--blur-amount)); z-index: 2000; display: none; opacity: 0; transition: opacity 0.2s ease-in-out; }
+        #command-palette-overlay.active { display: block; opacity: 1; }
+        #command-palette { position: absolute; top: 20vh; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--glass-bg-dark); border: 1px solid var(--glass-border-dark); border-radius: 12px; box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3); overflow: hidden; transition: transform 0.2s ease-out; }
+        #command-palette-overlay.active #command-palette { transform: translateX(-50%) scale(1); }
+        #cmd-input { width: 100%; padding: 1rem; font-size: 1.1rem; background: transparent; border: none; border-bottom: 1px solid var(--glass-border-dark); color: var(--text-color); outline: none; }
+        #cmd-results { list-style: none; max-height: 300px; overflow-y: auto; }
+        #cmd-results li { padding: 0.75rem 1rem; cursor: pointer; text-align: left; border-bottom: 1px solid var(--glass-border-dark); transition: background 0.2s ease; }
+        #cmd-results li:last-child { border-bottom: none; }
+        #cmd-results li:hover, #cmd-results li.selected { background: rgba(255, 255, 255, 0.1); }
+        #cmd-results li small { opacity: 0.7; margin-left: 0.5rem; font-size: 0.8rem; }
+        
+        /* --- 14. नवीन: टोस्ट नोटिफिकेशन (Item 3) --- */
+        #toast {
+            position: fixed;
+            bottom: -100px; /* सुरुवातीला लपलेले */
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            background: var(--glass-bg-dark);
+            border: 1px solid var(--glass-border-dark);
+            color: var(--text-color);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            z-index: 3000;
+            transition: bottom 0.5s ease-in-out;
+        }
+        #toast.show {
+            bottom: 30px;
         }
     </style>
 </head>
@@ -358,15 +266,21 @@
             <h1>ब्रह्मविद्या कल्पद्रूम</h1>
             
             <p class="subtitle glass-ui">
-                श्रीकृष्णरावो म्हणे उद्धवदेवा : हा ज्ञानरत्नाचा ठेवा :<br>
-                भलेतया हातीं नेदावा : अधिकारेंवीण ।।<br>
-                हे ज्ञानसुधा गोमटी : जे पान करीति कर्णपुटीं : <br>
-                तयां कहिं नाहिं कामाठी : जन्ममरणाची ।।(श्रीउद्धवगीता)<br>
+                श्रीकृष्णरावो म्हणे उद्धवदेवा : हा ज्ञानरत्नाचा ठेवा : <br>
+                भलेतया हातीं नेदावा : अधिकारेंवीण ।। <br>
+                (श्रीउद्धवगीता)
             </p>
         </header>
 
         <main>
             
+            <div id="progress-container" class="glass-ui">
+                <div id="progress-label">0/0 पूर्ण</div>
+                <div id="progress-bar-bg">
+                    <div id="progress-bar"></div>
+                </div>
+            </div>
+
             <div class="view-toggle glass-ui">
                 <button id="view-grid" class="active" title="Grid View">&#9638;</button>
                 <button id="view-list" title="List View">&#9776;</button>
@@ -374,25 +288,34 @@
             </div>
 
             <div class="search-wrapper">
-                <input type="search" id="search-bar" class="glass-ui" placeholder="प्रोजेक्ट शोधा... (किंवा 'theme light')">
+                <input type="search" id="search-bar" class="glass-ui" placeholder="प्रोजेक्ट शोधा... (उदा. 'gita', 'tool')">
                 <span class="cmd-tip">Cmd+K</span>
             </div>
             
-            <div class="categories-container">
-                
-                <section class="category-section" id="recently-viewed-section" style="display: none;">
-                    <h2 class="category-title glass-ui">अलीकडे पाहिलेले</h2>
-                    <ul class="category-list view-horizontal" id="recently-viewed-list">
-                        </ul>
-                </section>
-
-                <section class="category-section">
-                    <h2 class="category-title glass-ui">Spiritual Applications</h2>
-                    <ul class="category-list view-grid" id="project-list">
-                        </ul>
-                </section>
-                
+            <div class="filter-toggle glass-ui">
+                <button id="filter-all" class="active" data-filter="all">सर्व</button>
+                <button id="filter-read" data-filter="read">वाचलेले</button>
+                <button id="filter-unread" data-filter="unread">न वाचलेले</button>
             </div>
+            
+            <div id="no-results">
+                <h2>¯\_(ツ)_/¯</h2>
+                <p>तुमचा शोध जुळला नाही.</p>
+            </div>
+
+            <div id="categories-container">
+                <section class="category-section">
+                    <h2 class="category-title glass-ui skeleton" style="width: 250px; height: 50px;"></h2>
+                    <ul class="category-list view-grid">
+                        <li class="glass-ui skeleton" style="width: 250px; min-height: 350px;"></li>
+                        <li class="glass-ui skeleton" style="width: 250px; min-height: 350px;"></li>
+                        <li class="glass-ui skeleton" style="width: 250px; min-height: 350px;"></li>
+                    </ul>
+                </section>
+            </div>
+
+            <div id="recently-viewed-container"></div>
+            
         </main>
     </div>
 
@@ -407,6 +330,8 @@
             <ul id="cmd-results"></ul>
         </div>
     </div>
+    
+    <div id="toast"></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -416,13 +341,18 @@
             let fuse; // Fuzzy Search साठी
             let readStatus = {}; // वाचलेले प्रोजेक्ट्स (Item 13)
             let recentlyViewed = []; // (Item 14)
+            let currentFilter = 'all'; // (Item 4)
+            let currentView = 'view-grid'; // (Item 3)
+            let toastTimer; // (Item 3)
 
             const dom = {
-                projectList: document.getElementById('project-list'),
+                categoriesContainer: document.getElementById('categories-container'),
+                recentlyViewedContainer: document.getElementById('recently-viewed-container'),
+                noResults: document.getElementById('no-results'),
                 searchBar: document.getElementById('search-bar'),
                 themeToggle: document.getElementById('theme-toggle'),
                 viewToggleButtons: document.querySelectorAll('.view-toggle button'),
-                allCategoryLists: document.querySelectorAll('.category-list:not(#recently-viewed-list)'),
+                filterToggleButtons: document.querySelectorAll('.filter-toggle button'),
                 modal: {
                     overlay: document.getElementById('modalOverlay'),
                     frame: document.getElementById('projectFrame'),
@@ -433,10 +363,11 @@
                     input: document.getElementById('cmd-input'),
                     results: document.getElementById('cmd-results')
                 },
-                recentlyViewed: {
-                    section: document.getElementById('recently-viewed-section'),
-                    list: document.getElementById('recently-viewed-list')
-                }
+                progress: {
+                    label: document.getElementById('progress-label'),
+                    bar: document.getElementById('progress-bar')
+                },
+                toast: document.getElementById('toast')
             };
 
             // --- 1. PWA (Item 1) - सर्व्हिस वर्कर रजिस्टर करणे ---
@@ -446,31 +377,25 @@
                     .catch(error => console.log('Service Worker Registration Failed:', error));
             }
             
-            // --- 2. मुख्य इनिशिएलायझेशन (JSON लोड करणे - Item 16) ---
+            // --- 2. मुख्य इनिशिएलायझेशन ---
             async function initializeApp() {
                 loadPreferences(); // जुन्या पसंती लोड करणे
-                await loadData();
-                renderProjectList(allProjects);
-                renderRecentlyViewed();
+                await loadData(); // JSON डेटा लोड करणे
                 setupEventListeners();
+                renderAllContent(); // सर्वकाही रेंडर करणे
             }
 
             // --- 3. पसंती लोड/सेव्ह करणे (Item 3) ---
             function loadPreferences() {
-                // Theme (Item 3)
                 const currentTheme = localStorage.getItem('theme') || 'dark';
                 const isLight = (currentTheme === 'light');
                 document.body.dataset.theme = currentTheme;
                 dom.themeToggle.checked = isLight;
                 
-                // View (Item 3)
-                const currentView = localStorage.getItem('view') || 'view-grid';
+                currentView = localStorage.getItem('view') || 'view-grid';
                 applyView(currentView);
 
-                // Read Status (Item 13)
                 readStatus = JSON.parse(localStorage.getItem('readStatus')) || {};
-                
-                // Recently Viewed (Item 14)
                 recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
             }
 
@@ -480,37 +405,95 @@
                     const response = await fetch('projects.json');
                     allProjects = await response.json();
                     
-                    // Fuzzy Search (Item 7) - Fuse.js सेटअप
+                    // Fuzzy Search (Item 7) - 'tags' पण सर्च करेल!
                     const options = {
-                        keys: ['title', 'description', 'id'],
-                        threshold: 0.4, // 0.0 = perfect match, 1.0 = any match
+                        keys: ['title', 'description', 'id', 'tags'],
+                        threshold: 0.3,
                     };
                     fuse = new Fuse(allProjects, options);
                     
                 } catch (error) {
                     console.error('Error loading projects:', error);
-                    dom.projectList.innerHTML = '<li>प्रोजेक्ट्स लोड करण्यात अयशस्वी.</li>';
+                    dom.categoriesContainer.innerHTML = '<h2 style="text-align: center;">प्रोजेक्ट्स लोड करण्यात अयशस्वी.</h2>';
                 }
             }
 
-            // --- 5. प्रोजेक्ट कार्ड्स रेंडर करणे ---
-            function renderProjectList(projects) {
-                dom.projectList.innerHTML = ''; // लिस्ट रिकामी करणे
-                projects.forEach(project => {
-                    const projectData = project.item || project; // (fuse.js 'item' property देतो)
-                    dom.projectList.appendChild(createProjectCard(projectData));
-                });
+            // --- 5. मुख्य रेंडरिंग फंक्शन ---
+            // हा फंक्शन आता सर्वकाही रेंडर करतो: कॅटेगरी, फिल्टर्स, प्रोग्रेस
+            function renderAllContent(searchQuery = '') {
+                dom.categoriesContainer.innerHTML = ''; // स्केलेटन्स/जुना डेटा साफ करणे
+                dom.noResults.style.display = 'none';
+
+                let projectsToRender = [];
+
+                // 1. सर्च फिल्टर (Fuzzy Search)
+                if (searchQuery) {
+                    projectsToRender = fuse.search(searchQuery).map(result => result.item);
+                } else {
+                    projectsToRender = allProjects;
+                }
+                
+                // 2. 'वाचलेले' फिल्टर (Item 4)
+                if (currentFilter === 'read') {
+                    projectsToRender = projectsToRender.filter(p => readStatus[p.id]);
+                } else if (currentFilter === 'unread') {
+                    projectsToRender = projectsToRender.filter(p => !readStatus[p.id]);
+                }
+                
+                // 3. प्रोजेक्ट्सना कॅटेगरीनुसार ग्रुप करणे (Item 2)
+                const projectsByCategory = projectsToRender.reduce((acc, project) => {
+                    const category = project.category || 'Other';
+                    if (!acc[category]) {
+                        acc[category] = [];
+                    }
+                    acc[category].push(project);
+                    return acc;
+                }, {});
+
+                // 4. डायनॅमिक कॅटेगरी रेंडर करणे (Item 2)
+                const categoryNames = Object.keys(projectsByCategory);
+                if (categoryNames.length === 0) {
+                    // "No Results" मेसेज (Item 3)
+                    dom.noResults.style.display = 'block';
+                    dom.noResults.querySelector('p').textContent = searchQuery 
+                        ? `तुमचा शोध '${searchQuery}' जुळला नाही.` 
+                        : `या फिल्टरमध्ये कोणतेही प्रोजेक्ट्स नाहीत.`;
+                } else {
+                    categoryNames.forEach(categoryName => {
+                        const section = document.createElement('section');
+                        section.className = 'category-section';
+                        
+                        section.innerHTML = `
+                            <h2 class="category-title glass-ui">${categoryName}</h2>
+                            <ul class="category-list ${currentView}"></ul>
+                        `;
+                        
+                        const list = section.querySelector('ul');
+                        projectsByCategory[categoryName].forEach(project => {
+                            list.appendChild(createProjectCard(project));
+                        });
+                        
+                        dom.categoriesContainer.appendChild(section);
+                    });
+                }
+                
+                // 5. 'अलीकडे पाहिलेले' रेंडर करणे (Item 14)
+                renderRecentlyViewed();
+                
+                // 6. प्रोग्रेस बार अपडेट करणे (Item 4)
+                updateProgress();
             }
 
+            // --- 6. एक प्रोजेक्ट कार्ड तयार करणे ---
             function createProjectCard(project) {
                 const li = document.createElement('li');
                 li.className = 'glass-ui';
                 li.dataset.url = project.url;
-                li.dataset.id = project.id; // 'id' वरून ओळखणे
+                li.dataset.id = project.id;
                 li.style.backgroundImage = `url('${project.image}')`;
-                li.tabIndex = 0; // (Item 17 - Accessibility)
+                li.tabIndex = 0;
 
-                const isRead = readStatus[project.id]; // (Item 13)
+                const isRead = !!readStatus[project.id]; // (Item 13)
 
                 li.innerHTML = `
                     <div class="card-actions">
@@ -525,29 +508,20 @@
                     </div>
                 `;
 
-                // --- कार्डसाठी इव्हेंट लिस्टनर्स ---
-                
-                // 1. कार्डवर क्लिक (Modal उघडण्यासाठी)
+                // इव्हेंट लिस्टनर्स
                 li.addEventListener('click', (e) => {
-                    // जर बटणावर क्लिक झाले असेल, तर Modal उघडू नका
                     if (e.target.closest('.card-action-btn')) return;
-                    openModal(project.url, project.id, project.title);
+                    openModal(project);
                 });
-
-                // 2. कीबोर्ड 'Enter' (Item 17 - Accessibility)
                 li.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' && !e.target.closest('.card-action-btn')) {
-                        openModal(project.url, project.id, project.title);
+                        openModal(project);
                     }
                 });
-
-                // 3. शेअर बटन (Item 15)
                 li.querySelector('.share-btn').addEventListener('click', (e) => {
-                    e.stopPropagation(); // कार्ड क्लिक ट्रिगर होऊ नये
+                    e.stopPropagation();
                     shareProject(project.title, project.url);
                 });
-
-                // 4. 'वाचले' बटन (Item 13)
                 li.querySelector('.read-toggle').addEventListener('click', (e) => {
                     e.stopPropagation();
                     toggleReadStatus(project.id, e.currentTarget);
@@ -556,74 +530,80 @@
                 return li;
             }
 
-            // --- 6. सर्व इव्हेंट लिस्टनर्स सेटअप ---
+            // --- 7. सर्व इव्हेंट लिस्टनर्स सेटअप ---
             function setupEventListeners() {
-                // Theme Toggle (Item 3)
                 dom.themeToggle.addEventListener('change', () => {
                     const newTheme = dom.themeToggle.checked ? 'light' : 'dark';
                     document.body.dataset.theme = newTheme;
                     localStorage.setItem('theme', newTheme);
                 });
 
-                // View Toggles (Item 3)
                 dom.viewToggleButtons.forEach(button => {
                     button.addEventListener('click', () => {
-                        const newViewClass = button.id;
-                        applyView(newViewClass);
-                        localStorage.setItem('view', newViewClass);
+                        currentView = button.id;
+                        applyView(currentView);
+                        localStorage.setItem('view', currentView);
+                    });
+                });
+                
+                // नवीन: फिल्टर बटणे (Item 4)
+                dom.filterToggleButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        currentFilter = button.dataset.filter;
+                        dom.filterToggleButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        renderAllContent(dom.searchBar.value); // फिल्टरसह पुन्हा रेंडर करा
                     });
                 });
 
-                // Modal Close (Item 17 - Accessibility)
                 dom.modal.closeBtn.addEventListener('click', closeModal);
                 dom.modal.overlay.addEventListener('click', (e) => {
                     if (e.target === dom.modal.overlay) closeModal();
                 });
 
-                // Keyboard Listeners (Accessibility & Commands)
                 document.addEventListener('keydown', (e) => {
-                    // Modal 'Esc' (Item 17)
-                    if (e.key === 'Escape' && dom.modal.overlay.classList.contains('active')) {
-                        closeModal();
+                    if (e.key === 'Escape') {
+                        if (dom.modal.overlay.classList.contains('active')) closeModal();
+                        if (dom.palette.overlay.classList.contains('active')) closeCommandPalette();
                     }
-                    // Command Palette 'Esc' (Item 8)
-                    if (e.key === 'Escape' && dom.palette.overlay.classList.contains('active')) {
-                        closeCommandPalette();
-                    }
-                    // Command Palette 'Cmd+K' (Item 8)
                     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                         e.preventDefault();
                         openCommandPalette();
                     }
                 });
 
-                // Search Bar (Item 5 + 7)
-                dom.searchBar.addEventListener('input', handleSearchInput);
+                // सर्च बार (Debounced)
+                let searchTimer;
+                dom.searchBar.addEventListener('input', () => {
+                    clearTimeout(searchTimer);
+                    searchTimer = setTimeout(() => {
+                        renderAllContent(dom.searchBar.value);
+                    }, 200); // 200ms नंतर सर्च करा
+                });
 
-                // Command Palette (Item 8)
                 dom.palette.overlay.addEventListener('click', (e) => {
                     if (e.target === dom.palette.overlay) closeCommandPalette();
                 });
                 dom.palette.input.addEventListener('input', handleCommandInput);
             }
             
-            // --- 7. व्ह्यू टॉगल लॉजिक (Item 3) ---
+            // --- 8. व्ह्यू टॉगल लॉजिक (Item 3) ---
             function applyView(viewClass) {
                 dom.viewToggleButtons.forEach(btn => btn.classList.remove('active'));
                 document.getElementById(viewClass)?.classList.add('active');
-                dom.allCategoryLists.forEach(list => {
+                // नवीन: आता हे डायनॅमिकली तयार होणाऱ्या सर्व लिस्टवर लागू होईल
+                document.querySelectorAll('.category-list').forEach(list => {
                     list.classList.remove('view-grid', 'view-list', 'view-horizontal');
                     list.classList.add(viewClass);
                 });
             }
 
-            // --- 8. Modal लॉजिक (Item 14 साठी अपडेटेड) ---
-            function openModal(url, id, title) {
-                if (url) {
-                    dom.modal.frame.src = url;
+            // --- 9. Modal लॉजिक ---
+            function openModal(project) {
+                if (project && project.url) {
+                    dom.modal.frame.src = project.url;
                     dom.modal.overlay.classList.add('active');
-                    // अलीकडे पाहिलेले (Item 14)
-                    addToRecentlyViewed(id, title, url);
+                    addToRecentlyViewed(project.id);
                 }
             }
             function closeModal() {
@@ -631,7 +611,7 @@
                 dom.modal.frame.src = '';
             }
 
-            // --- 9. शेअर लॉजिक (Item 15) ---
+            // --- 10. शेअर लॉजिक (Item 15) + टोस्ट (Item 3) ---
             function shareProject(title, url) {
                 if (navigator.share) {
                     navigator.share({
@@ -640,81 +620,88 @@
                         url: url
                     }).catch(error => console.log('Error sharing:', error));
                 } else {
-                    // Fallback for desktop/unsupported browsers
                     navigator.clipboard.writeText(url);
-                    alert('लिंक क्लिपबोर्डवर कॉपी केली आहे!');
+                    showToast('लिंक क्लिपबोर्डवर कॉपी झाली ✅');
                 }
             }
+            
+            // नवीन: टोस्ट नोटिफिकेशन (Item 3)
+            function showToast(message) {
+                clearTimeout(toastTimer); // जुना टायमर (जर असेल तर) क्लिअर करा
+                dom.toast.textContent = message;
+                dom.toast.classList.add('show');
+                toastTimer = setTimeout(() => {
+                    dom.toast.classList.remove('show');
+                }, 3000); // 3 सेकंदात लपवा
+            }
 
-            // --- 10. 'वाचले' लॉजिक (Item 13) ---
+            // --- 11. 'वाचले' लॉजिक (Item 13 & 4) ---
             function toggleReadStatus(id, button) {
                 const isNowRead = !readStatus[id];
-                readStatus[id] = isNowRead;
+                if (isNowRead) {
+                    readStatus[id] = true;
+                } else {
+                    delete readStatus[id]; // जागा वाचवण्यासाठी 'false' ऐवजी डिलीट करा
+                }
                 localStorage.setItem('readStatus', JSON.stringify(readStatus));
 
-                // Update button style
+                // बटण अपडेट करा
                 button.classList.toggle('read', isNowRead);
                 button.innerHTML = isNowRead ? '&#10003;' : '&#9711;';
                 
-                // Update main list card (if it exists)
-                const mainCardButton = dom.projectList.querySelector(`li[data-id="${id}"] .read-toggle`);
-                if (mainCardButton && mainCardButton !== button) {
-                    mainCardButton.classList.toggle('read', isNowRead);
-                    mainCardButton.innerHTML = isNowRead ? '&#10003;' : '&#9711;';
+                // प्रोग्रेस बार अपडेट करा
+                updateProgress();
+                
+                // जर 'read'/'unread' फिल्टर ऍक्टिव्ह असेल, तर लिस्ट पुन्हा रेंडर करा
+                if (currentFilter !== 'all') {
+                    renderAllContent(dom.searchBar.value);
                 }
             }
+            
+            // नवीन: प्रोग्रेस बार अपडेट (Item 4)
+            function updateProgress() {
+                const readCount = Object.keys(readStatus).length;
+                const totalCount = allProjects.length;
+                const percentage = (totalCount > 0) ? (readCount / totalCount) * 100 : 0;
+                
+                dom.progress.label.textContent = `${readCount}/${totalCount} पूर्ण`;
+                dom.progress.bar.style.width = `${percentage}%`;
+            }
 
-            // --- 11. अलीकडे पाहिलेले (Item 14) ---
-            function addToRecentlyViewed(id, title, url) {
-                // आधी असेल तर काढून टाका
-                recentlyViewed = recentlyViewed.filter(item => item.id !== id);
-                // सर्वात वर ऍड करा
-                recentlyViewed.unshift({ id, title, url });
-                // फक्त ५ ठेवा
+            // --- 12. अलीकडे पाहिलेले (Item 14) ---
+            function addToRecentlyViewed(id) {
+                recentlyViewed = recentlyViewed.filter(item => item !== id); // जुनी एन्ट्री काढा
+                recentlyViewed.unshift(id); // सर्वात वर ऍड करा
                 if (recentlyViewed.length > 5) {
-                    recentlyViewed.pop();
+                    recentlyViewed.pop(); // फक्त ५ ठेवा
                 }
                 localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
                 renderRecentlyViewed();
             }
 
             function renderRecentlyViewed() {
-                if (recentlyViewed.length === 0) {
-                    dom.recentlyViewed.section.style.display = 'none';
-                    return;
-                }
+                dom.recentlyViewedContainer.innerHTML = ''; // आधीचे साफ करा
+                if (recentlyViewed.length === 0) return;
                 
-                dom.recentlyViewed.section.style.display = 'block';
-                dom.recentlyViewed.list.innerHTML = '';
+                const section = document.createElement('section');
+                section.className = 'category-section';
+                section.id = 'recently-viewed-section';
+                section.innerHTML = `
+                    <h2 class="category-title glass-ui">अलीकडे पाहिलेले</h2>
+                    <ul class="category-list view-horizontal" id="recently-viewed-list"></ul>
+                `;
                 
-                recentlyViewed.forEach(item => {
-                    // पूर्ण प्रोजेक्ट डेटा मिळवा (image, desc साठी)
-                    const fullProject = allProjects.find(p => p.id === item.id);
-                    if (fullProject) {
-                        dom.recentlyViewed.list.appendChild(createProjectCard(fullProject));
+                const list = section.querySelector('ul');
+                recentlyViewed.forEach(id => {
+                    const project = allProjects.find(p => p.id === id);
+                    if (project) {
+                        list.appendChild(createProjectCard(project));
                     }
                 });
-            }
-
-            // --- 12. स्मार्ट सर्च (Item 5) + फजी सर्च (Item 7) ---
-            function handleSearchInput(e) {
-                const query = e.target.value.toLowerCase().trim();
                 
-                // स्मार्ट कमांड चेक (Item 5)
-                if (executeCommand(query)) {
-                    dom.searchBar.value = ''; // कमांड चालल्यास बार रिकामा करा
-                    return;
-                }
-
-                // फजी सर्च (Item 7)
-                if (query === '') {
-                    renderProjectList(allProjects); // काही नसेल तर सर्व दाखवा
-                } else {
-                    const results = fuse.search(query);
-                    renderProjectList(results);
-                }
+                dom.recentlyViewedContainer.appendChild(section);
             }
-            
+
             // --- 13. कमांड पॅलेट (Item 8) ---
             let commandPaletteActions = [];
 
@@ -722,13 +709,16 @@
                 commandPaletteActions = [
                     ...allProjects.map(p => ({
                         name: `Open: ${p.title}`,
-                        category: 'Projects',
-                        action: () => openModal(p.url, p.id, p.title)
+                        category: p.category,
+                        action: () => openModal(p)
                     })),
-                    { name: 'Switch to Light Theme', category: 'Theme', action: () => dom.themeToggle.click() },
-                    { name: 'Switch to Dark Theme', category: 'Theme', action: () => dom.themeToggle.click() },
+                    { name: 'Switch to Light Theme', category: 'Theme', action: () => !dom.themeToggle.checked && dom.themeToggle.click() },
+                    { name: 'Switch to Dark Theme', category: 'Theme', action: () => dom.themeToggle.checked && dom.themeToggle.click() },
                     { name: 'Set Grid View', category: 'View', action: () => document.getElementById('view-grid').click() },
                     { name: 'Set List View', category: 'View', action: () => document.getElementById('view-list').click() },
+                    { name: 'Show All Projects', category: 'Filter', action: () => document.getElementById('filter-all').click() },
+                    { name: 'Show Read Projects', category: 'Filter', action: () => document.getElementById('filter-read').click() },
+                    { name: 'Show Unread Projects', category: 'Filter', action: () => document.getElementById('filter-unread').click() },
                 ];
                 
                 dom.palette.overlay.classList.add('active');
@@ -744,7 +734,7 @@
             function handleCommandInput() {
                 const query = dom.palette.input.value.toLowerCase();
                 const filteredActions = commandPaletteActions.filter(action => 
-                    action.name.toLowerCase().includes(query)
+                    action.name.toLowerCase().includes(query) || action.category.toLowerCase().includes(query)
                 );
                 renderCommandResults(filteredActions);
             }
@@ -764,38 +754,6 @@
                     };
                     dom.palette.results.appendChild(li);
                 });
-            }
-
-            // --- 14. स्मार्ट कमांड इंजिन (Item 5) ---
-            // हा सर्च बार आणि कमांड पॅलेट दोन्हीसाठी वापरला जातो
-            function executeCommand(query) {
-                query = query.toLowerCase();
-                if (query.startsWith('open ')) {
-                    const title = query.substring(5).trim();
-                    const result = fuse.search(title);
-                    if (result.length > 0) {
-                        const project = result[0].item;
-                        openModal(project.url, project.id, project.title);
-                        return true;
-                    }
-                }
-                if (query === 'theme light') {
-                    if (!dom.themeToggle.checked) dom.themeToggle.click();
-                    return true;
-                }
-                if (query === 'theme dark') {
-                    if (dom.themeToggle.checked) dom.themeToggle.click();
-                    return true;
-                }
-                if (query === 'view grid') {
-                    document.getElementById('view-grid').click();
-                    return true;
-                }
-                if (query === 'view list') {
-                    document.getElementById('view-list').click();
-                    return true;
-                }
-                return false; // कोणतीही कमांड मॅच झाली नाही
             }
 
             // --- ॲप सुरू करा ---
