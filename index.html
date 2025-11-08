@@ -1,75 +1,375 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="mr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#071021">
-  <title>ब्रह्मविद्या कल्पद्रूम — Main Projects</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ब्रह्मविद्या कल्पद्रूम</title>
 
-  <!-- system font stack (SF Pro on Apple devices) -->
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand">
-        <div class="title-box">
-  <div class="title">ब्रह्मविद्या कल्पद्रूम</div>
-  <div class="subtitle">
-    श्रीकृष्णरावो म्हणे उद्धवदेवा : हा ज्ञानरत्नाचा ठेवा :
-    भलेतया हातीं नेदावा : अधिकारेंवीण ।।
-    हे ज्ञानसुधा गोमटी : जे पान करीति कर्णपुटीं :
-    तयां कहिं नाहिं कामाठी : जन्ममरणाची ।।
-  </div>
-</div>
+    <style>
+        /* --- 1. व्हेरिएबल्स आणि थीम --- */
+        :root {
+            --bg-image-light: url('https://plus.unsplash.com/premium_photo-1665929000997-af599165621e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1374');
+            --bg-image-dark: url('https://plus.unsplash.com/premium_photo-1670265724031-d91f0c7fd994?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1227');
+            --glass-bg-light: rgba(255, 255, 255, 0.15);
+            --glass-border-light: rgba(255, 255, 255, 0.2);
+            --text-color: #ffffff;
+            --glass-bg-dark: rgba(0, 0, 0, 0.15);
+            --glass-border-dark: rgba(255, 255, 255, 0.1);
+            --blur-amount: 15px;
+        }
 
-<div class="card" onclick="go('gita')">गीता भाष्य</div>
-<div class="card" onclick="go('sthalpothi')">स्थलपाठ</div>
-<div class="card" onclick="go('sumanmala')">सुमनमाला</div>
-<div class="card" onclick="go('geetapath')">गीता पाठ</div>
-<div class="card" onclick="go('sutrapath')">सूत्रपाठ</div>
-<div class="card" onclick="go('ashtak')">अष्टक</div>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      <nav class="top-actions">
-        <button id="refreshBtn" class="btn-ghost" aria-label="Refresh projects">⟳</button>
-        <button id="openAll" class="btn-ghost" title="Open first project">Open</button>
-      </nav>
-    </header>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            padding: 1.5rem;
+            color: var(--text-color);
+            background-image: var(--bg-image-light);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: background-image 0.7s ease-in-out;
+        }
 
-    <!-- decorative moving liquid blob (behind content) -->
-    <div class="bg-layer" aria-hidden="true">
-      <svg class="blob-1" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="lg1" x1="0" x2="1">
-            <stop offset="0%" stop-color="#7ee5ff"></stop>
-            <stop offset="100%" stop-color="#c59bff"></stop>
-          </linearGradient>
-        </defs>
-        <path fill="url(#lg1)" d="M421,48Q499,96,532,173Q565,250,512,313Q459,376,389,417Q319,458,236,429Q153,400,119,329Q85,258,108,186Q131,114,216,80Q301,46,421,48Z"/>
-      </svg>
+        body[data-theme="dark"] {
+            background-image: var(--bg-image-dark);
+        }
 
-      <svg class="blob-2" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="lg2" x1="0" x2="1">
-            <stop offset="0%" stop-color="#ffd7a8"></stop>
-            <stop offset="100%" stop-color="#ffa6c9"></stop>
-          </linearGradient>
-        </defs>
-        <path fill="url(#lg2)" d="M200,120Q260,40,360,80Q460,120,520,200Q580,280,520,360Q460,440,360,480Q260,520,160,480Q60,440,40,340Q20,240,80,160Q140,80,200,120Z" />
-      </svg>
+        /* --- 2. मुख्य कंटेनर --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- 3. iOS सारखा Glass UI --- */
+        .glass-ui {
+            background: var(--glass-bg-light);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--glass-border-light);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease, border 0.3s ease;
+        }
+
+        body[data-theme="dark"] .glass-ui {
+            background: var(--glass-bg-dark);
+            border: 1px solid var(--glass-border-dark);
+        }
+
+        /* --- 4. डे/नाईट टॉगल --- */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+        .theme-switch input { display: none; }
+        .slider {
+            background-color: #ccc; bottom: 0; cursor: pointer; left: 0;
+            position: absolute; right: 0; top: 0; transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            background-color: #fff; bottom: 4px; content: ""; height: 26px;
+            left: 4px; position: absolute; transition: .4s; width: 26px; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #555; }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        /* --- 5. व्ह्यू टॉगल बटणे --- */
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem;
+            margin: 0 auto 1.5rem auto;
+            width: fit-content;
+        }
+        .view-toggle button {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            padding: 0.25rem 1rem;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.2s ease;
+        }
+        .view-toggle button.active { opacity: 1; }
+        .view-toggle button:hover { opacity: 0.8; }
+
+        /* --- 6. सर्च बार --- */
+        #search-bar {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: none;
+            outline: none;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+        #search-bar::placeholder { color: rgba(255, 255, 255, 0.7); }
+        body[data-theme="dark"] #search-bar::placeholder { color: rgba(255, 255, 255, 0.5); }
+
+        /* --- 7. कॅटेगरी (नवीन) --- */
+        .category-section {
+            margin-bottom: 2.5rem; /* कॅटेगरीमधील अंतर */
+            text-align: left;
+        }
+        
+        .category-title {
+            font-size: 1.5rem;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: inline-block; /* टेक्स्टच्या रुंदीनुसार */
+        }
+
+        /* --- 8. कॅटेगरी लिस्ट (3 व्ह्यूसाठी) --- */
+        .category-list {
+            list-style: none;
+        }
+        .category-list li {
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            margin-bottom: 1.5rem;
+        }
+        .category-list li:hover { transform: scale(1.02); }
+        .category-list h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+        .category-list p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* व्ह्यू 1: ग्रिड (Grid) */
+        .category-list.view-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .category-list.view-grid li { margin-bottom: 0; }
+
+        /* व्ह्यू 2: लिस्ट (List) */
+        .category-list.view-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .category-list.view-list li { width: 100%; margin-bottom: 0; }
+
+        /* व्ह्यू 3: रो (Row / Horizontal) */
+        .category-list.view-horizontal {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            gap: 1.5rem;
+            padding-bottom: 1.5rem;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .category-list.view-horizontal::-webkit-scrollbar { display: none; }
+        .category-list.view-horizontal li {
+            width: 280px;
+            flex-shrink: 0;
+            display: inline-block;
+            margin-bottom: 0;
+        }
+        
+        /* --- 9. फुल-स्क्रीन Modal --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            display: none; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-overlay iframe {
+            width: 95vw; height: 95vh;
+            border: 1px solid var(--glass-border-light);
+            border-radius: 10px; background: #fff;
+        }
+        .close-button {
+            position: absolute; top: 20px; right: 30px; font-size: 2.5rem;
+            font-weight: bold; color: white; background: transparent;
+            border: none; cursor: pointer; z-index: 1001;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+        }
+    </style>
+    </head>
+<body data-theme="light">
+
+    <div class="container">
+        <header>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="theme-toggle">
+                    <input type="checkbox" id="theme-toggle" />
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <h1>ब्रह्मविद्या कल्पद्रूम</h1>
+        </header>
+
+        <main>
+            
+            <div class="view-toggle glass-ui">
+                <button id="view-grid" class="active" title="Grid View">&#9638;</button>
+                <button id="view-list" title="List View">&#9776;</button>
+                <button id="view-horizontal" title="Row View">&#8596;</button>
+            </div>
+
+            <input type="search" id="search-bar" class="glass-ui" placeholder="प्रोजेक्ट शोधा...">
+
+            <div class="categories-container">
+
+                <section class="category-section">
+                    <h2 class="category-title glass-ui">Spiritual Applications</h2>
+                    
+                    <ul class="category-list view-grid"> <li class="glass-ui" data-url="https://rohanborsa6600-tech.github.io/Gita-new/">
+                            <h2>गीता भाष्य</h2>
+                            <p>ADX💎</p>
+                        </li>
+                        <li class="glass-ui" data-url="https://rohanborsa6600-tech.github.io/Offline-Sthalpothi-/">
+                            <h2>स्थलपोथी</h2>
+                            <p>ADX💎</p>
+                        </li>
+                        <li class="glass-ui" data-url="https://rohanborsa6600-tech.github.io/Sumanmala1/">
+                            <h2>सुमनमाला</h2>
+                            <p>ADX💎</p>
+                        </li>
+                        <li class="glass-ui" data-url="https://rohanborsa6600-tech.github.io/Geeta-/index.html#section-14">
+                            <h2>गीता पाठ</h2>
+                            <p>ADX💎</p>
+                        </li>
+                        <li class="glass-ui" data-url="https://rohanborsa6600-tech.github.io/Sutrapath-/#auto-section-23">
+                            <h2>सूत्रपाठ</h2>
+                            <p>ADX💎</p>
+                        </li>
+                        <li class="glass-ui" data-url="https://rohanborsa6600-tech.github.io/ASHTAK/">
+                            <h2>अष्टक</h2>
+                            <p>ADX💎</p>
+                        </li>
+                    </ul>
+                </section>
+
+                </div>
+            </main>
     </div>
 
-    <main class="content">
-      <section id="projectsGrid" class="cards" aria-live="polite">
-        <!-- cards inserted by script -->
-      </section>
-    </main>
+    <div class="modal-overlay" id="modalOverlay">
+        <button class="close-button" id="closeModal">&times;</button>
+        <iframe id="projectFrame" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
 
-    <footer class="footer">
-      <small>Created for <strong>rohanborsa6600-tech</strong> · Click a card to open project</small>
-    </footer>
-  </div>
+            // --- 1. Modal (पॉप-अप) लॉजिक ---
+            // हा सिलेक्टर आता सर्व कॅटेगरीमधील 'li' निवडेल
+            const allCategories = document.querySelectorAll('.category-list li');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const projectFrame = document.getElementById('projectFrame');
+            const closeModal = document.getElementById('closeModal');
 
-  <script src="script.js" defer></script>
-</body>
+            allCategories.forEach(item => {
+                item.addEventListener('click', () => {
+                    const url = item.getAttribute('data-url');
+                    if (url) {
+                        projectFrame.src = url;
+                        modalOverlay.classList.add('active');
+                    }
+                });
+            });
+
+            closeModal.addEventListener('click', () => {
+                modalOverlay.classList.remove('active');
+                projectFrame.src = '';
+            });
+
+            // --- 2. Theme (Day/Night) टॉगल लॉजिक ---
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    document.body.dataset.theme = 'dark';
+                } else {
+                    document.body.dataset.theme = 'light';
+                }
+            });
+
+            // --- 3. सर्च बार लॉजिक (अपडेटेड) ---
+            const searchBar = document.getElementById('search-bar');
+            // सर्व कॅटेगरी सेक्शन्स निवडा
+            const allCategorySections = document.querySelectorAll('.category-section'); 
+            
+            searchBar.addEventListener('input', (e) => {
+                const filter = e.target.value.toLowerCase();
+
+                allCategorySections.forEach(section => {
+                    let itemsFoundInSection = 0;
+                    // त्या सेक्शनमधील सर्व 'li' आयटम्स निवडा
+                    const allItemsInSection = section.querySelectorAll('.category-list li'); 
+                    
+                    allItemsInSection.forEach(item => {
+                        const title = item.querySelector('h2').textContent.toLowerCase();
+                        const description = item.querySelector('p').textContent.toLowerCase();
+                        
+                        if (title.includes(filter) || description.includes(filter)) {
+                            item.style.display = ''; // आयटम दाखवा
+                            itemsFoundInSection++;
+                        } else {
+                            item.style.display = 'none'; // आयटम लपवा
+                        }
+                    });
+
+                    // जर सेक्शनमध्ये काहीच सापडले नाही, तर संपूर्ण सेक्शन लपवा
+                    if (itemsFoundInSection > 0) {
+                        section.style.display = ''; // सेक्शन दाखवा
+                    } else {
+                        section.style.display = 'none'; // सेक्शन लपवा
+                    }
+                });
+            });
+
+            // --- 4. व्ह्यू टॉगल लॉजिक (अपडेटेड) ---
+            const viewToggleButtons = document.querySelectorAll('.view-toggle button');
+            // सर्व कॅटेगरी लिस्ट्स निवडा
+            const allCategoryLists = document.querySelectorAll('.category-list'); 
+            
+            viewToggleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const newViewClass = button.id; // उदा. "view-grid"
+                    
+                    viewToggleButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    // हा व्ह्यू सर्व कॅटेगरी लिस्ट्सना लागू करा
+                    allCategoryLists.forEach(list => {
+                        list.classList.remove('view-grid', 'view-list', 'view-horizontal');
+                        list.classList.add(newViewClass);
+                    });
+                });
+            });
+
+        });
+    </script>
+    </body>
 </html>
