@@ -79,56 +79,35 @@
         #search-bar::placeholder { color: rgba(255, 255, 255, 0.7); }
         .cmd-tip { position: absolute; right: 1rem; top: 0.9rem; font-size: 0.8rem; background: rgba(0,0,0,0.2); padding: 0.2rem 0.5rem; border-radius: 6px; pointer-events: none; opacity: 0.7; }
         
-        /* --- 7. नवीन: प्रोग्रेस बार (Item 4) --- */
+        /* --- 7. प्रोग्रेस बार --- */
         #progress-container {
-            width: 100%;
-            margin-bottom: 1.5rem;
-            text-align: left;
+            width: 100%; margin-bottom: 1.5rem; text-align: left;
             padding: 0 0.5rem;
         }
         #progress-label {
-            font-size: 0.8rem;
-            opacity: 0.8;
-            margin-bottom: 0.5rem;
+            font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.5rem;
         }
         #progress-bar-bg {
-            width: 100%;
-            height: 8px;
-            background: var(--progress-bar-bg);
-            border-radius: 4px;
-            overflow: hidden;
+            width: 100%; height: 8px; background: var(--progress-bar-bg);
+            border-radius: 4px; overflow: hidden;
         }
         #progress-bar {
-            height: 100%;
-            width: 0%; /* JS हे अपडेट करेल */
-            background: var(--progress-bar-fill);
-            border-radius: 4px;
-            transition: width 0.5s ease;
+            height: 100%; width: 0%; background: var(--progress-bar-fill);
+            border-radius: 4px; transition: width 0.5s ease;
         }
         
-        /* --- 8. नवीन: फिल्टर्स (Item 4) --- */
+        /* --- 8. फिल्टर्स --- */
         .filter-toggle {
-            display: flex;
-            justify-content: center;
-            padding: 0.5rem;
-            margin: 0 auto 1.5rem auto;
-            width: fit-content;
+            display: flex; justify-content: center; padding: 0.5rem;
+            margin: 0 auto 1.5rem auto; width: fit-content;
         }
         .filter-toggle button {
-            background: transparent;
-            border: none;
-            color: var(--text-color);
-            font-size: 0.9rem;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            opacity: 0.6;
-            transition: opacity 0.2s ease;
-            border-radius: 12px;
+            background: transparent; border: none; color: var(--text-color);
+            font-size: 0.9rem; padding: 0.5rem 1rem; cursor: pointer;
+            opacity: 0.6; transition: opacity 0.2s ease; border-radius: 12px;
         }
         .filter-toggle button.active {
-            opacity: 1;
-            font-weight: bold;
-            background: rgba(255, 255, 255, 0.1);
+            opacity: 1; font-weight: bold; background: rgba(255, 255, 255, 0.1);
         }
 
         /* --- 9. कॅटेगरी आणि कार्ड्स --- */
@@ -137,13 +116,9 @@
         .category-list { list-style: none; }
         .category-list li {
             padding: 1.25rem; cursor: pointer; margin-bottom: 1.5rem;
-            position: relative;
-            /* उभ्या कार्डसाठी */
-            width: 250px;
-            min-height: 350px;
+            position: relative; width: 250px; min-height: 350px;
             background-size: cover; background-position: center;
-            display: flex; flex-direction: column;
-            justify-content: flex-end; /* टेक्स्ट खाली */
+            display: flex; flex-direction: column; justify-content: flex-end;
             overflow: hidden;
             transition: transform 0.3s ease, background 0.2s ease, box-shadow 0.3s ease;
             transform-style: preserve-3d;
@@ -182,7 +157,7 @@
         #recently-viewed-list li { min-height: 250px; width: 200px; }
         #recently-viewed-list .card-content h2 { font-size: 1.1rem; }
         
-        /* --- 10. नवीन: लोडिंग स्केलेटन (Item 3) --- */
+        /* --- 10. लोडिंग स्केलेटन --- */
         .skeleton {
             background: var(--glass-bg-dark);
             border: 1px solid var(--glass-border-dark);
@@ -204,13 +179,10 @@
             100% { left: 100%; }
         }
         
-        /* --- 11. नवीन: "No Results" मेसेज (Item 3) --- */
+        /* --- 11. "No Results" मेसेज --- */
         #no-results {
-            display: none; /* JS हे दाखवेल */
-            padding: 3rem 1rem;
-            color: var(--text-color);
-            opacity: 0.8;
-            text-align: center;
+            display: none; padding: 3rem 1rem;
+            color: var(--text-color); opacity: 0.8; text-align: center;
         }
 
         /* --- 12. Modal --- */
@@ -233,7 +205,7 @@
         #cmd-results li:hover, #cmd-results li.selected { background: rgba(255, 255, 255, 0.1); }
         #cmd-results li small { opacity: 0.7; margin-left: 0.5rem; font-size: 0.8rem; }
         
-        /* --- 14. नवीन: टोस्ट नोटिफिकेशन (Item 3) --- */
+        /* --- 14. टोस्ट नोटिफिकेशन --- */
         #toast {
             position: fixed;
             bottom: -100px; /* सुरुवातीला लपलेले */
@@ -250,6 +222,15 @@
         }
         #toast.show {
             bottom: 30px;
+        }
+
+        /* --- 15. नवीन: सर्च हायलाइट --- */
+        mark {
+            background-color: var(--highlight-color);
+            color: #111;
+            border-radius: 4px;
+            padding: 0.1rem 0.3rem;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -340,11 +321,12 @@
             // --- 0. ग्लोबल व्हेरिएबल्स ---
             let allProjects = []; // JSON मधून आलेले सर्व प्रोजेक्ट्स
             let fuse; // Fuzzy Search साठी
-            let readStatus = {}; // वाचलेले प्रोजेक्ट्स (Item 13)
-            let recentlyViewed = []; // (Item 14)
-            let currentFilter = 'all'; // (Item 4)
-            let currentView = 'view-grid'; // (Item 3)
-            let toastTimer; // (Item 3)
+            let readStatus = {}; // वाचलेले प्रोजेक्ट्स
+            let recentlyViewed = []; // अलीकडे पाहिलेले
+            let currentFilter = 'all'; // सध्याचा फिल्टर
+            let currentView = 'view-grid'; // सध्याचा व्ह्यू
+            let toastTimer; // टोस्टसाठी
+            let cmdSelectedIndex = -1; // कमांड पॅलेट नॅव्हिगेशनसाठी
 
             const dom = {
                 categoriesContainer: document.getElementById('categories-container'),
@@ -371,7 +353,7 @@
                 toast: document.getElementById('toast')
             };
 
-            // --- 1. PWA (Item 1) - सर्व्हिस वर्कर रजिस्टर करणे ---
+            // --- 1. PWA - सर्व्हिस वर्कर रजिस्टर करणे ---
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('sw.js')
                     .then(registration => console.log('Service Worker Registered:', registration))
@@ -386,7 +368,7 @@
                 renderAllContent(); // सर्वकाही रेंडर करणे
             }
 
-            // --- 3. पसंती लोड/सेव्ह करणे (Item 3) ---
+            // --- 3. पसंती लोड/सेव्ह करणे ---
             function loadPreferences() {
                 const currentTheme = localStorage.getItem('theme') || 'dark';
                 const isLight = (currentTheme === 'light');
@@ -400,16 +382,17 @@
                 recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
             }
 
-            // --- 4. JSON डेटा लोड करणे (Item 16) ---
+            // --- 4. JSON डेटा लोड करणे ---
             async function loadData() {
                 try {
                     const response = await fetch('projects.json');
                     allProjects = await response.json();
                     
-                    // Fuzzy Search (Item 7) - 'tags' पण सर्च करेल!
+                    // Fuzzy Search - 'tags' पण सर्च करेल!
                     const options = {
                         keys: ['title', 'description', 'id', 'tags'],
                         threshold: 0.3,
+                        includeMatches: true, // हायलाइटिंगसाठी हे आवश्यक आहे
                     };
                     fuse = new Fuse(allProjects, options);
                     
@@ -420,7 +403,6 @@
             }
 
             // --- 5. मुख्य रेंडरिंग फंक्शन ---
-            // हा फंक्शन आता सर्वकाही रेंडर करतो: कॅटेगरी, फिल्टर्स, प्रोग्रेस
             function renderAllContent(searchQuery = '') {
                 dom.categoriesContainer.innerHTML = ''; // स्केलेटन्स/जुना डेटा साफ करणे
                 dom.noResults.style.display = 'none';
@@ -429,32 +411,35 @@
 
                 // 1. सर्च फिल्टर (Fuzzy Search)
                 if (searchQuery) {
-                    projectsToRender = fuse.search(searchQuery).map(result => result.item);
+                    // 'item' आणि 'matches' सह पूर्ण रिझल्ट घ्या
+                    projectsToRender = fuse.search(searchQuery);
                 } else {
-                    projectsToRender = allProjects;
+                    // सर्च नसेल तर, 'item' स्ट्रक्चर मॅच करा
+                    projectsToRender = allProjects.map(p => ({ item: p, matches: [] }));
                 }
                 
-                // 2. 'वाचलेले' फिल्टर (Item 4)
+                // 2. 'वाचलेले' फिल्टर
                 if (currentFilter === 'read') {
-                    projectsToRender = projectsToRender.filter(p => readStatus[p.id]);
+                    projectsToRender = projectsToRender.filter(r => readStatus[r.item.id]);
                 } else if (currentFilter === 'unread') {
-                    projectsToRender = projectsToRender.filter(p => !readStatus[p.id]);
+                    projectsToRender = projectsToRender.filter(r => !readStatus[r.item.id]);
                 }
                 
-                // 3. प्रोजेक्ट्सना कॅटेगरीनुसार ग्रुप करणे (Item 2)
-                const projectsByCategory = projectsToRender.reduce((acc, project) => {
+                // 3. प्रोजेक्ट्सना कॅटेगरीनुसार ग्रुप करणे
+                const projectsByCategory = projectsToRender.reduce((acc, result) => {
+                    const project = result.item; // 'result.item' वापरा
                     const category = project.category || 'Other';
                     if (!acc[category]) {
                         acc[category] = [];
                     }
-                    acc[category].push(project);
+                    acc[category].push(result); // पूर्ण 'result' ऑब्जेक्ट पुश करा
                     return acc;
                 }, {});
 
-                // 4. डायनॅमिक कॅटेगरी रेंडर करणे (Item 2)
+                // 4. डायनॅमिक कॅटेगरी रेंडर करणे
                 const categoryNames = Object.keys(projectsByCategory);
                 if (categoryNames.length === 0) {
-                    // "No Results" मेसेज (Item 3)
+                    // "No Results" मेसेज
                     dom.noResults.style.display = 'block';
                     dom.noResults.querySelector('p').textContent = searchQuery 
                         ? `तुमचा शोध '${searchQuery}' जुळला नाही.` 
@@ -470,64 +455,55 @@
                         `;
                         
                         const list = section.querySelector('ul');
-                        projectsByCategory[categoryName].forEach(project => {
-                            list.appendChild(createProjectCard(project));
+                        projectsByCategory[categoryName].forEach(result => {
+                            // 'createProjectCard' ला पूर्ण 'result' ऑब्जेक्ट पास करा
+                            list.appendChild(createProjectCard(result));
                         });
                         
                         dom.categoriesContainer.appendChild(section);
                     });
                 }
                 
-                // 5. 'अलीकडे पाहिलेले' रेंडर करणे (Item 14)
+                // 5. 'अलीकडे पाहिलेले' रेंडर करणे
                 renderRecentlyViewed();
                 
-                // 6. प्रोग्रेस बार अपडेट करणे (Item 4)
+                // 6. प्रोग्रेस बार अपडेट करणे
                 updateProgress();
             }
 
             // --- 6. एक प्रोजेक्ट कार्ड तयार करणे ---
-            function createProjectCard(project) {
+            function createProjectCard(result) {
+                const project = result.item;
+                const matches = result.matches || [];
+
                 const li = document.createElement('li');
                 li.className = 'glass-ui';
                 li.dataset.url = project.url;
                 li.dataset.id = project.id;
                 li.style.backgroundImage = `url('${project.image}')`;
-                li.tabIndex = 0;
+                li.tabIndex = 0; // ऍक्सेसिबिलिटी: कीबोर्डने फोकस करण्यासाठी
 
-                const isRead = !!readStatus[project.id]; // (Item 13)
+                const isRead = !!readStatus[project.id];
+                
+                // हायलाइट केलेले टायटल आणि डिस्क्रिप्शन मिळवा
+                const title = highlightMatches(project.title, matches, 'title');
+                const description = highlightMatches(project.description, matches, 'description');
 
                 li.innerHTML = `
                     <div class="card-actions">
-                        <button class="card-action-btn share-btn" title="Share">&#10148;</button>
-                        <button class="card-action-btn read-toggle ${isRead ? 'read' : ''}" title="Mark as Read">
+                        <button class="card-action-btn share-btn" title="Share" aria-label="Share ${project.title}">&#10148;</button>
+                        <button class="card-action-btn read-toggle ${isRead ? 'read' : ''}" title="Mark as Read" aria-label="Mark ${project.title} as ${isRead ? 'unread' : 'read'}">
                             ${isRead ? '&#10003;' : '&#9711;'}
                         </button>
                     </div>
                     <div class="card-content">
-                        <h2>${project.title}</h2>
-                        <p>${project.description}</p>
+                        <h2>${title}</h2>
+                        <p>${description}</p>
                     </div>
                 `;
 
-                // इव्हेंट लिस्टनर्स
-                li.addEventListener('click', (e) => {
-                    if (e.target.closest('.card-action-btn')) return;
-                    openModal(project);
-                });
-                li.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' && !e.target.closest('.card-action-btn')) {
-                        openModal(project);
-                    }
-                });
-                li.querySelector('.share-btn').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    shareProject(project.title, project.url);
-                });
-                li.querySelector('.read-toggle').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleReadStatus(project.id, e.currentTarget);
-                });
-
+                // इव्हेंट लिस्टनर्स (Event Delegation) साठी येथून काढून टाकले
+                // हे ॲपला अधिक जलद बनवते
                 return li;
             }
 
@@ -547,7 +523,6 @@
                     });
                 });
                 
-                // नवीन: फिल्टर बटणे (Item 4)
                 dom.filterToggleButtons.forEach(button => {
                     button.addEventListener('click', () => {
                         currentFilter = button.dataset.filter;
@@ -581,18 +556,66 @@
                         renderAllContent(dom.searchBar.value);
                     }, 200); // 200ms नंतर सर्च करा
                 });
+                
+                // --- नवीन: इव्हेंट डेलिगेशन ---
+                // हे शेकडो ऐवजी फक्त ४ लिस्टनर्स वापरते
+                setupCategoryClickListeners(dom.categoriesContainer);
+                setupCategoryClickListeners(dom.recentlyViewedContainer);
 
+                // --- कमांड पॅलेट ---
                 dom.palette.overlay.addEventListener('click', (e) => {
                     if (e.target === dom.palette.overlay) closeCommandPalette();
                 });
                 dom.palette.input.addEventListener('input', handleCommandInput);
+                dom.palette.input.addEventListener('keydown', handleCommandKeyboardNav); // कीबोर्ड नॅव्हिगेशन
             }
             
-            // --- 8. व्ह्यू टॉगल लॉजिक (Item 3) ---
+            // --- 7B. नवीन: इव्हेंट डेलिगेशनसाठी हेल्पर ---
+            function setupCategoryClickListeners(container) {
+                container.addEventListener('click', e => {
+                    const card = e.target.closest('li[data-id]');
+                    if (!card) return; // कार्डच्या बाहेर क्लिक केले
+
+                    const projectId = card.dataset.id;
+                    const project = allProjects.find(p => p.id === projectId);
+                    if (!project) return;
+
+                    // 1. शेअर बटण
+                    if (e.target.closest('.share-btn')) {
+                        e.stopPropagation();
+                        shareProject(project.title, project.url);
+                        return;
+                    }
+
+                    // 2. रीड टॉगल
+                    if (e.target.closest('.read-toggle')) {
+                        e.stopPropagation();
+                        toggleReadStatus(project.id, e.target.closest('.read-toggle'));
+                        return;
+                    }
+                    
+                    // 3. कार्ड क्लिक (मोडल उघडणे)
+                    if (e.target.closest('.card-action-btn')) return; // ऍक्शन बटणावर क्लिक केल्यास मोडल नको
+                    openModal(project);
+                });
+
+                // कीबोर्ड (Enter) साठी
+                container.addEventListener('keydown', e => {
+                    if (e.key !== 'Enter') return;
+                    
+                    const card = e.target.closest('li[data-id]');
+                    if (card && !e.target.closest('.card-action-btn')) {
+                        const projectId = card.dataset.id;
+                        const project = allProjects.find(p => p.id === projectId);
+                        if (project) openModal(project);
+                    }
+                });
+            }
+            
+            // --- 8. व्ह्यू टॉगल लॉजिक ---
             function applyView(viewClass) {
                 dom.viewToggleButtons.forEach(btn => btn.classList.remove('active'));
                 document.getElementById(viewClass)?.classList.add('active');
-                // नवीन: आता हे डायनॅमिकली तयार होणाऱ्या सर्व लिस्टवर लागू होईल
                 document.querySelectorAll('.category-list').forEach(list => {
                     list.classList.remove('view-grid', 'view-list', 'view-horizontal');
                     list.classList.add(viewClass);
@@ -612,7 +635,7 @@
                 dom.modal.frame.src = '';
             }
 
-            // --- 10. शेअर लॉजिक (Item 15) + टोस्ट (Item 3) ---
+            // --- 10. शेअर लॉजिक + टोस्ट ---
             function shareProject(title, url) {
                 if (navigator.share) {
                     navigator.share({
@@ -626,9 +649,8 @@
                 }
             }
             
-            // नवीन: टोस्ट नोटिफिकेशन (Item 3)
             function showToast(message) {
-                clearTimeout(toastTimer); // जुना टायमर (जर असेल तर) क्लिअर करा
+                clearTimeout(toastTimer); 
                 dom.toast.textContent = message;
                 dom.toast.classList.add('show');
                 toastTimer = setTimeout(() => {
@@ -636,7 +658,7 @@
                 }, 3000); // 3 सेकंदात लपवा
             }
 
-            // --- 11. 'वाचले' लॉजिक (Item 13 & 4) ---
+            // --- 11. 'वाचले' लॉजिक ---
             function toggleReadStatus(id, button) {
                 const isNowRead = !readStatus[id];
                 if (isNowRead) {
@@ -650,6 +672,10 @@
                 button.classList.toggle('read', isNowRead);
                 button.innerHTML = isNowRead ? '&#10003;' : '&#9711;';
                 
+                // नवीन: ऍक्सेसिबिलिटी (aria-label)
+                const projectTitle = allProjects.find(p => p.id === id)?.title || '';
+                button.setAttribute('aria-label', `Mark ${projectTitle} as ${isNowRead ? 'unread' : 'read'}`);
+                
                 // प्रोग्रेस बार अपडेट करा
                 updateProgress();
                 
@@ -659,7 +685,6 @@
                 }
             }
             
-            // नवीन: प्रोग्रेस बार अपडेट (Item 4)
             function updateProgress() {
                 const readCount = Object.keys(readStatus).length;
                 const totalCount = allProjects.length;
@@ -669,7 +694,7 @@
                 dom.progress.bar.style.width = `${percentage}%`;
             }
 
-            // --- 12. अलीकडे पाहिलेले (Item 14) ---
+            // --- 12. अलीकडे पाहिलेले ---
             function addToRecentlyViewed(id) {
                 recentlyViewed = recentlyViewed.filter(item => item !== id); // जुनी एन्ट्री काढा
                 recentlyViewed.unshift(id); // सर्वात वर ऍड करा
@@ -696,14 +721,15 @@
                 recentlyViewed.forEach(id => {
                     const project = allProjects.find(p => p.id === id);
                     if (project) {
-                        list.appendChild(createProjectCard(project));
+                        // हायलाइटिंगची गरज नाही, म्हणून 'dummy' result ऑब्जेक्ट बनवा
+                        list.appendChild(createProjectCard({ item: project, matches: [] }));
                     }
                 });
                 
                 dom.recentlyViewedContainer.appendChild(section);
             }
 
-            // --- 13. कमांड पॅलेट (Item 8) ---
+            // --- 13. कमांड पॅलेट ---
             let commandPaletteActions = [];
 
             function openCommandPalette() {
@@ -742,10 +768,12 @@
 
             function renderCommandResults(actions) {
                 dom.palette.results.innerHTML = '';
-                actions.forEach(action => {
+                cmdSelectedIndex = -1; // प्रत्येक रेंडरवर रीसेट करा
+                actions.forEach((action, index) => {
                     const li = document.createElement('li');
                     li.innerHTML = `${action.name} <small>${action.category}</small>`;
-                    li.tabIndex = 0;
+                    li.tabIndex = -1; // कीबोर्ड नॅव्हिगेशनसाठी
+                    li.dataset.index = index;
                     li.onclick = () => {
                         action.action();
                         closeCommandPalette();
@@ -755,6 +783,59 @@
                     };
                     dom.palette.results.appendChild(li);
                 });
+            }
+            
+            // --- 14. नवीन: कमांड पॅलेट कीबोर्ड नॅव्हिगेशन ---
+            function handleCommandKeyboardNav(e) {
+                const results = dom.palette.results.querySelectorAll('li');
+                if (results.length === 0) return;
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    cmdSelectedIndex = (cmdSelectedIndex + 1) % results.length;
+                    updateCommandSelection(results);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    cmdSelectedIndex = (cmdSelectedIndex - 1 + results.length) % results.length;
+                    updateCommandSelection(results);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (cmdSelectedIndex >= 0 && results[cmdSelectedIndex]) {
+                        results[cmdSelectedIndex].click(); // निवडलेल्या आयटमवर क्लिक करा
+                    }
+                }
+            }
+
+            function updateCommandSelection(results) {
+                results.forEach((li, index) => {
+                    if (index === cmdSelectedIndex) {
+                        li.classList.add('selected');
+                        li.scrollIntoView({ block: 'nearest' }); // महत्त्वाचे
+                    } else {
+                        li.classList.remove('selected');
+                    }
+                });
+            }
+            
+            // --- 15. नवीन: सर्च हायलाइट हेल्पर ---
+            function highlightMatches(text, matches, key) {
+                if (!text) return ''; // टेक्स्ट रिकामे असल्यास
+                const match = matches.find(m => m.key === key);
+                if (!match || !match.indices) return text; // मॅच नसेल तर मूळ टेक्स्ट
+
+                const indices = match.indices;
+                let highlightedText = '';
+                let lastIndex = 0;
+
+                // Fuse.js [start, end] इंडेक्स देतो. त्याप्रमाणे <mark> टॅग टाका.
+                for (const [start, end] of indices) {
+                    highlightedText += text.substring(lastIndex, start);
+                    highlightedText += `<mark>${text.substring(start, end + 1)}</mark>`;
+                    lastIndex = end + 1;
+                }
+                highlightedText += text.substring(lastIndex);
+                
+                return highlightedText;
             }
 
             // --- ॲप सुरू करा ---
